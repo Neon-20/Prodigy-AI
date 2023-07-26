@@ -7,6 +7,8 @@ import { Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Music, ImageIcon, LayoutDashboard, MessageSquare, VideoIcon, Code, Settings } from "lucide-react";
 import {usePathname} from "next/navigation";
+import { FreeCounter } from "@/components/free-counter";
+// import { boolean } from "zod";
 
 const monsterrate = Montserrat({
     weight:"600",
@@ -51,7 +53,15 @@ const routes = [{
 }]
 
 
-const Sidebar = () => {
+interface SidebarProps{
+    apiLimitCount?:number;
+    isPro:boolean
+}
+
+const Sidebar = ({
+    apiLimitCount = 0,
+    isPro=false
+}:SidebarProps) => {
 const pathName = usePathname();
 
 return (
@@ -85,6 +95,10 @@ return (
         ))}
         </div>
     </div>
+    <FreeCounter 
+    apiLimitCount={apiLimitCount}
+    isPro={isPro}
+    />
     </div>
 )
 }

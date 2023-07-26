@@ -2,7 +2,7 @@
 
 import { Heading } from "@/components/heading";
 import * as z from "zod";
-import { MessageSquare } from "lucide-react";
+import { Code } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -18,11 +18,12 @@ import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avtar";
 import { BotAvatar } from "@/components/bot-avatar";
+import ReactMarkdown from "react-markdown";
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
 
 
-const ConversationPage = () => {
+const CodePage = () => {
 
 const proModel = useProModel();
 
@@ -41,13 +42,13 @@ const isLoading = form.formState.isSubmitting;
 
 const onSubmit = async(values:z.infer<typeof formSchema>) =>{
     try{
-        const userMessage: ChatCompletionRequestMessage = {
+    const userMessage: ChatCompletionRequestMessage = {
         role:"user",
         content:values.prompt,
     };
     const newMessages = [...messages,userMessage];
 
-    const response = await axios.post("/api/conversation",{
+    const response = await axios.post("/api/code",{
         messages: newMessages,
     })
     setMessages((current)=>[...current,userMessage,response.data]);
@@ -55,15 +56,14 @@ const onSubmit = async(values:z.infer<typeof formSchema>) =>{
 
     }
     catch(e:any){
-    if(e?.response?.status === 403){
+        if(e?.response?.status === 403){
         proModel.onOpen();
-    }
-    else{
-        toast.error("Something went wrong");
-    }
+        }else{
+            toast.error("Something went wrong");
+        }
     }
     finally{
-    router.refresh();//It makes the collaberation between server and client compo. easier
+    router.refresh();
     }
 }
 
@@ -71,11 +71,11 @@ const onSubmit = async(values:z.infer<typeof formSchema>) =>{
 return (
     <div>
     <Heading 
-    title="Conversation"
-    description="Our most advanced Conversational AI Model"
-    icon={MessageSquare}
-    iconColor="text-violet-500"
-    bgColor="bg-violet-500/10"
+    title="Code Generation"
+    description="Generate code with Layman Text :P"
+    icon={Code}
+    iconColor="text-green-700"
+    bgColor="bg-green-7 00/10"
     />
     {/* Building the Form below */}
     <div className="px-4 lg:px-8">
@@ -95,7 +95,7 @@ return (
                     <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading} 
-                        placeholder="Tell me I am an Iphone User without telling me :)" 
+                        placeholder="Write a fetch request in Typescript..." 
                         {...field}
                     />
                     </FormControl>
@@ -119,7 +119,7 @@ return (
         )}
         {messages.length === 0 && !isLoading &&(
             <div>
-                <Empty label="No Conversation Started"/>
+                <Empty label="No Code Generated"/>
             </div>
         )}
             <div className="flex flex-col-reverse gap-y-4">
@@ -131,9 +131,21 @@ return (
                     >
                     {/* Decide whether to render user avatar or bot avatar */}
                     {message.role === "user" ? <UserAvatar/> : <BotAvatar/>}
-                    <p className="text-sm ml-1 py-1">
-                    {message.content}
-                    </p>
+                    <ReactMarkdown
+                    components={{
+                        pre:({node,...props}) =>(
+                            <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
+                                <pre {...props}/>
+                            </div>
+                        ),
+                        code:({node,...props}) =>(
+                            <code className="bg-black/10 rounded-lg p-1 "{...props}/>
+                        )
+                    }}
+                    className="text-sm overflow-hidden leading-7"
+                    >
+                        {message.content || ""}
+                    </ReactMarkdown>
                     </div>
                 ))}
             </div>
@@ -143,4 +155,4 @@ return (
 )
 }
 
-export default ConversationPage;
+export default CodePage;

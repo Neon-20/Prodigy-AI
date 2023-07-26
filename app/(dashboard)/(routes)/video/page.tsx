@@ -2,7 +2,7 @@
 
 import { Heading } from "@/components/heading";
 import * as z from "zod";
-import { MessageSquare } from "lucide-react";
+import {  VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { formSchema } from "./constants";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -12,21 +12,18 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChatCompletionRequestMessage } from "openai";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avtar";
-import { BotAvatar } from "@/components/bot-avatar";
 import { useProModel } from "@/hooks/use-pro-model";
 import toast from "react-hot-toast";
 
 
-const ConversationPage = () => {
+
+const VideoPage = () => {
 
 const proModel = useProModel();
 
-const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
+const [video, setVideo] = useState<string>(); // 
 
 const router = useRouter();
 //  Create functions for the form to use
@@ -41,16 +38,13 @@ const isLoading = form.formState.isSubmitting;
 
 const onSubmit = async(values:z.infer<typeof formSchema>) =>{
     try{
-        const userMessage: ChatCompletionRequestMessage = {
-        role:"user",
-        content:values.prompt,
-    };
-    const newMessages = [...messages,userMessage];
 
-    const response = await axios.post("/api/conversation",{
-        messages: newMessages,
-    })
-    setMessages((current)=>[...current,userMessage,response.data]);
+    setVideo(undefined);
+
+    const response = await axios.post("/api/video",values);
+    
+    setVideo(response.data[0]);
+    
     form.reset()
 
     }
@@ -63,7 +57,7 @@ const onSubmit = async(values:z.infer<typeof formSchema>) =>{
     }
     }
     finally{
-    router.refresh();//It makes the collaberation between server and client compo. easier
+    router.refresh();
     }
 }
 
@@ -71,11 +65,11 @@ const onSubmit = async(values:z.infer<typeof formSchema>) =>{
 return (
     <div>
     <Heading 
-    title="Conversation"
-    description="Our most advanced Conversational AI Model"
-    icon={MessageSquare}
-    iconColor="text-violet-500"
-    bgColor="bg-violet-500/10"
+    title="Video Generation"
+    description="Generate Video with a Simple Prompt"
+    icon={VideoIcon}
+    iconColor="text-orange-700"
+    bgColor="bg-orange-700/10"
     />
     {/* Building the Form below */}
     <div className="px-4 lg:px-8">
@@ -95,7 +89,7 @@ return (
                     <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading} 
-                        placeholder="Tell me I am an Iphone User without telling me :)" 
+                        placeholder="Shark swimming around a coral reef." 
                         {...field}
                     />
                     </FormControl>
@@ -117,30 +111,22 @@ return (
             <Loader/>
             </div>
         )}
-        {messages.length === 0 && !isLoading &&(
+        {!video&& !isLoading &&(
             <div>
-                <Empty label="No Conversation Started"/>
+                <Empty label="No Video Generated"/>
             </div>
         )}
-            <div className="flex flex-col-reverse gap-y-4">
-                {messages.map((message)=>(
-                    <div
-                    key={message.content}
-                    className={cn("p-8 w-full flex items-start rounded-lg",
-                    message.role === "user" ? "bg-white border-black/10":"bg-muted")}
-                    >
-                    {/* Decide whether to render user avatar or bot avatar */}
-                    {message.role === "user" ? <UserAvatar/> : <BotAvatar/>}
-                    <p className="text-sm ml-1 py-1">
-                    {message.content}
-                    </p>
-                    </div>
-                ))}
-            </div>
+        
+            {/* Change this to actual audio file */}
+            {video && (
+                <video className="w-auto aspect-video mt-8 rounded-lg border-black" controls>
+                    <source src={video}/>
+                </video>
+            )}
         </div>
     </div>
 </div>
 )
 }
 
-export default ConversationPage;
+export default VideoPage;
