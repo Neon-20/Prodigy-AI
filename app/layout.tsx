@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en">
-      <link rel="icon" href="/logo.png"/>
+      <link rel="icon" href="/https://prodigy-ai-nine.vercel.app/logo.png"/>
       <CrispProvider />
       <body className={inter.className}>
         <ModelProvider/>
