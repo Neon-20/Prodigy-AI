@@ -10,8 +10,8 @@ const testimonials = [
         description:"One of the Best AI Tools I ever used!"
     },
     {
-        name:"Sai Lakshmi",
-        avatar:"S",
+        name:"Aman Mishra",
+        avatar:"A",
         title:"Software Engineer(Cisco)",
         description:"The Code Generation part is really cool."
     },
