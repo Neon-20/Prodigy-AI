@@ -6,33 +6,33 @@ const testimonials = [
     {
         name:"Pranav Rajveer",
         avatar:"P",
-        title:"Product Architect",
+        title:"Product Architect(TrustAuthX)",
         description:"One of the Best AI Tools I ever used!"
     },
     {
-        name:"Pranav Rajveer ",
-        avatar:"P",
-        title:"Product Architect",
-        description:"One of the Best AI Tools I ever used!"
+        name:"Sai Lakshmi",
+        avatar:"S",
+        title:"Software Engineer(Cisco)",
+        description:"The Code Generation part is really cool."
     },
     {
-        name:"Pranav Rajveer",
-        avatar:"P",
-        title:"Product Architect",
-        description:"One of the Best AI Tools I ever used!"
+        name:"Sam Ahuja",
+        avatar:"S",
+        title:"SDE (Google)",
+        description:"UX is very nice."
     },
     {
-        name:"Pranav Rajveer",
-        avatar:"P",
-        title:"Product Architect",
-        description:"One of the Best AI Tools I ever used!"
+        name:"Aniket Singh",
+        avatar:"A",
+        title:"Backend Engineer(ShareChat)",
+        description:"The website is very smooth to work with."
     }
 ]
 
 export const LandingContent = () =>{
     return (
         <div className="px-10 pb-20">
-            <h2 className="text-center text-4xl text-white font-bold mb-20 pt-5">   
+            <h2 className="text-center text-4xl text-white font-bold mb-20 pt-7">   
                 Testimonials
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
