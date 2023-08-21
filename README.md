@@ -1,4 +1,4 @@
-## Video Link of Repo : [Link](https://youtu.be/ZgKeYTPT6k0)
+## Video Link of Project : [Link](https://youtu.be/ZgKeYTPT6k0)
 
 ## Repo Architecture:
 ![Here](https://i.imgur.com/3NHZjgr.png)
